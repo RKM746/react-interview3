@@ -1,0 +1,151 @@
+Que-1.Difference between Axios and fetch?
+Ans-- Axios is a Javascript library used to make HTTP requests from node.js or XMLHttpRequests from the browser and it supports the Promise API that is native to JS ES6. It can be used intercept HTTP requests and responses and enables client-side protection against XSRF. It also has the ability to cancel requests.
+
+EX: axios.get('url') .then((response) => {
+
+	// Code for handling the response
+})
+.catch((error) => {
+
+	// Code for handling the error
+})
+
+The Fetch API provides a fetch() method defined on the window object. It also provides a JavaScript interface for accessing and manipulating parts of the HTTP pipeline (requests and responses). The fetch method has one mandatory argument- the URL of the resource to be fetched. This method returns a Promise that can be used to retrieve the response of the request.
+
+EX: fetch('path-to-the-resource-to-be-fetched') .then((response) => {
+
+	// Code for handling the response
+})
+.catch((error) => {
+
+	// Code for handling the error
+});
+
+
+
+Que-2.What is UseState Hook ?(Implementation)
+Ans-- The React useState Hook allows us to track state in a function component.State generally refers to data or properties that need to be tracking in an application.
+
+import React ,{ useState } from 'react'
+
+const UseState = () => {
+    const [count,setCount] = useState(0)
+
+  return (
+    <div>
+        This is count : {count};
+        <br />
+        <button onClick={()=>{setCount(count+1)}}>Increment</button> 
+    </div>
+  )
+}
+
+export default UseState
+
+
+
+Que-3.What is useEffect Hook ?(Implementation)
+Ans-- useEffect :It allows us to implement all of the lifecycle hooks from within a single function API. // this will run when the component mounts and anytime the stateful data changes React.useEffect(() => { alert('Hey, Nads here!'); });
+
+import React, { useEffect, useState } from 'react'
+
+const UseEffect = () => {
+    const [count, setCount] = useState(0);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setCount((count)=>count + 1);
+        },5000);
+    });
+    return (
+        <div>
+            This is count : {count};
+        </div>
+    )
+}
+export default UseEffect
+
+
+
+
+Que-4.What is UseReducer Hook ?(Implementation)
+Ans-- It does very similiar to setState, It's a different way to manage state using Redux Pattern. Instead of updating the state directly, we dispatch actions, that go to a reducer function, and this function figure out, how to compute the next state.
+
+import React, { useReducer } from 'react';
+
+const initialState = 0;
+const reducer = (state, action) => {
+    switch (action) {
+        case 'increment':
+            return state + 1;
+        case 'decrement':
+            return state - 1;
+        case 'reset':
+            return initialState;
+        default:
+            return state
+    }
+}
+
+const UseReducer = () => {
+
+    const [count, dispatch] = useReducer(reducer, initialState)
+    return (
+        <div>
+            <div>Count  {count}</div>
+            <button onClick={() => dispatch('increment')}>Increment</button>
+            <button onClick={() => dispatch('decrement')}>Decrement</button>
+            <button onClick={() => dispatch('reset')}>Reset</button>
+        </div>
+    )
+}
+
+export default UseReducer
+
+
+Que-5.What is UseMemo Hook ?(Implementation)
+Ans-- The React useMemo Hook returns a memoized value.Think of memoization as caching a value so that it does not need to be recalculated.The useMemo Hook only runs when one of its dependencies update.This can improve performance. The useMemo and useCallback Hooks are similar. The main difference is that useMemo returns a memoized value and useCallback returns a memoized function. You can learn more about useCallback in the useCallback chapter.
+
+import { useState, useMemo } from "react";
+// Usage
+function App() {
+  // State for our counter
+  const [count, setCount] = useState(0);
+  // State to keep track of current word in array we want to show
+  const [wordIndex, setWordIndex] = useState(0);
+  // Words we can flip through and view letter count
+  const words = ["hey", "this", "is", "cool"];
+  const word = words[wordIndex];
+  // Returns number of letters in a word
+  // We make it slow by including a large and completely unnecessary loop
+  const computeLetterCount = (word) => {
+    let i = 0;
+    while (i < 1000000000) i++;
+    return word.length;
+  };
+  // Memoize computeLetterCount so it uses cached return value if input array ...
+  // ... values are the same as last time the function was run.
+  const letterCount = useMemo(() => computeLetterCount(word), [word]);
+  // This would result in lag when incrementing the counter because ...
+  // ... we'd have to wait for expensive function when re-rendering.
+  //const letterCount = computeLetterCount(word);
+  return (
+    <div style={{ padding: "15px" }}>
+      <h2>Compute number of letters (slow )</h2>
+      <p>
+        "{word}" has {letterCount} letters
+      </p>
+      <button
+        onClick={() => {
+          const next = wordIndex + 1 === words.length ? 0 : wordIndex + 1;
+          setWordIndex(next);
+        }}
+      >
+        Next word
+      </button>
+      <h2>Increment a counter (fast ⚡️)</h2>
+      <p>Counter: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </div>
+  );
+}
